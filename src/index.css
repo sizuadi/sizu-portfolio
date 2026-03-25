@@ -1,0 +1,512 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+@import "tailwindcss";
+
+/* Enable class-based dark mode for manual toggle */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ──────────────────────────────────────────── */
+/* Base Reset & Typography                      */
+/* ──────────────────────────────────────────── */
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Hide default cursor on desktop — custom cursor takes over */
+  @media (pointer: fine) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
+
+  /* Light mode scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #fafafa;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  /* Dark mode scrollbar */
+  .dark ::-webkit-scrollbar-track {
+    background: #050505;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Selection */
+  ::selection {
+    background: rgba(0, 0, 0, 0.1);
+    color: #000;
+  }
+
+  .dark ::selection {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+  }
+}
+
+/* ──────────────────────────────────────────── */
+/* Markdown Prose — GitHub-style (.prose-mono)  */
+/* ──────────────────────────────────────────── */
+
+.prose-mono {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: #525252;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.dark .prose-mono {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Headings ── */
+
+.prose-mono h1,
+.prose-mono h2,
+.prose-mono h3,
+.prose-mono h4,
+.prose-mono h5,
+.prose-mono h6 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #171717;
+  margin-top: 1.75em;
+  margin-bottom: 0.75em;
+  line-height: 1.35;
+}
+
+.dark .prose-mono h1,
+.dark .prose-mono h2,
+.dark .prose-mono h3,
+.dark .prose-mono h4,
+.dark .prose-mono h5,
+.dark .prose-mono h6 {
+  color: #fff;
+}
+
+.prose-mono h1 { font-size: 1.75rem; border-bottom: 1px solid #e5e5e5; padding-bottom: 0.4em; }
+.prose-mono h2 { font-size: 1.375rem; border-bottom: 1px solid #e5e5e5; padding-bottom: 0.4em; }
+.prose-mono h3 { font-size: 1.125rem; }
+.prose-mono h4 { font-size: 1rem; }
+.prose-mono h5 { font-size: 0.875rem; }
+.prose-mono h6 { font-size: 0.8125rem; color: #737373; }
+
+.dark .prose-mono h1,
+.dark .prose-mono h2 { border-bottom-color: rgba(255, 255, 255, 0.1); }
+.dark .prose-mono h6 { color: rgba(255, 255, 255, 0.5); }
+
+/* ── Paragraphs ── */
+
+.prose-mono p {
+  margin-bottom: 1.25em;
+}
+
+/* ── Links ── */
+
+.prose-mono a {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(37, 99, 235, 0.3);
+  transition: all 0.2s;
+}
+
+.dark .prose-mono a {
+  color: #60a5fa;
+  text-decoration-color: rgba(96, 165, 250, 0.3);
+}
+
+.prose-mono a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ── Bold & Italic ── */
+
+.prose-mono strong {
+  font-weight: 700;
+  color: #171717;
+}
+
+.dark .prose-mono strong {
+  color: #fff;
+}
+
+.prose-mono em {
+  font-style: italic;
+}
+
+/* ── Strikethrough (GFM) ── */
+
+.prose-mono del {
+  text-decoration: line-through;
+  color: #a3a3a3;
+}
+
+.dark .prose-mono del {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Inline Code ── */
+
+.prose-mono code {
+  font-size: 0.8125em;
+  padding: 0.2em 0.45em;
+  background: #f5f5f5;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+}
+
+.dark .prose-mono code {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Code Blocks (pre) ── */
+
+.prose-mono pre {
+  margin: 1.5em 0;
+  padding: 1.25em 1.5em;
+  background: #f6f8fa;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dark .prose-mono pre {
+  background: #0d1117;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.prose-mono pre code {
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  font-size: inherit;
+  white-space: pre;
+}
+
+/* ── Lists (ul, ol) ── */
+
+.prose-mono ul,
+.prose-mono ol {
+  padding-left: 2em;
+  margin-bottom: 1.25em;
+}
+
+.prose-mono ol {
+  list-style-type: decimal;
+}
+
+.prose-mono ul {
+  list-style-type: disc;
+}
+
+.prose-mono li {
+  margin-bottom: 0.35em;
+}
+
+.prose-mono li > p {
+  margin-bottom: 0.5em;
+}
+
+.prose-mono li::marker {
+  color: #a3a3a3;
+}
+
+.dark .prose-mono li::marker {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Nested lists */
+.prose-mono ul ul,
+.prose-mono ol ol,
+.prose-mono ul ol,
+.prose-mono ol ul {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.prose-mono ul ul { list-style-type: circle; }
+.prose-mono ul ul ul { list-style-type: square; }
+
+/* ── Task Lists (GFM) ── */
+
+.prose-mono input[type="checkbox"] {
+  appearance: none;
+  width: 1em;
+  height: 1em;
+  border: 2px solid #d4d4d4;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-right: 0.5em;
+  position: relative;
+  top: -1px;
+  cursor: default;
+}
+
+.dark .prose-mono input[type="checkbox"] {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.prose-mono input[type="checkbox"]:checked {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.prose-mono input[type="checkbox"]:checked::after {
+  content: "✓";
+  display: block;
+  text-align: center;
+  font-size: 0.7em;
+  line-height: 1em;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ── Blockquotes ── */
+
+.prose-mono blockquote {
+  border-left: 4px solid #e5e5e5;
+  padding: 0.25em 1em;
+  margin: 1.5em 0;
+  color: #737373;
+}
+
+.dark .prose-mono blockquote {
+  border-left-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Nested blockquotes */
+.prose-mono blockquote blockquote {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose-mono blockquote > p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Tables (GFM) ── */
+
+.prose-mono table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 0.875rem;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose-mono thead {
+  background: #f6f8fa;
+}
+
+.dark .prose-mono thead {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.prose-mono th {
+  font-weight: 600;
+  text-align: left;
+  padding: 0.6em 1em;
+  border: 1px solid #e5e5e5;
+  color: #171717;
+}
+
+.dark .prose-mono th {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.prose-mono td {
+  padding: 0.6em 1em;
+  border: 1px solid #e5e5e5;
+}
+
+.dark .prose-mono td {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Striped rows */
+.prose-mono tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.dark .prose-mono tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ── Horizontal Rule ── */
+
+.prose-mono hr {
+  border: none;
+  height: 3px;
+  background: #e5e5e5;
+  margin: 2em 0;
+}
+
+.dark .prose-mono hr {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Images ── */
+
+.prose-mono img {
+  max-width: 100%;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  margin: 1.5em 0;
+  display: block;
+}
+
+.dark .prose-mono img {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Keyboard Keys ── */
+
+.prose-mono kbd {
+  display: inline-block;
+  padding: 0.15em 0.4em;
+  font-size: 0.75em;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  line-height: 1;
+  color: #171717;
+  background: #fafafa;
+  border: 1px solid #d4d4d4;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #d4d4d4;
+}
+
+.dark .prose-mono kbd {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ── Footnotes ── */
+
+.prose-mono sup a {
+  font-size: 0.75em;
+  text-decoration: none;
+  color: #2563eb;
+}
+
+.dark .prose-mono sup a {
+  color: #60a5fa;
+}
+
+.prose-mono .footnotes {
+  margin-top: 2em;
+  padding-top: 1em;
+  border-top: 1px solid #e5e5e5;
+  font-size: 0.8125rem;
+}
+
+.dark .prose-mono .footnotes {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Details / Summary (collapsible) ── */
+
+.prose-mono details {
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+}
+
+.dark .prose-mono details {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.prose-mono summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #171717;
+}
+
+.dark .prose-mono summary {
+  color: #fff;
+}
+
+/* ── Abbreviations ── */
+
+.prose-mono abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+/* ── Definition Lists ── */
+
+.prose-mono dt {
+  font-weight: 700;
+  margin-top: 1em;
+  color: #171717;
+}
+
+.dark .prose-mono dt {
+  color: #fff;
+}
+
+.prose-mono dd {
+  margin-left: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+/* ── Mark (highlight) ── */
+
+.prose-mono mark {
+  background: #fef08a;
+  color: #171717;
+  padding: 0.1em 0.2em;
+  border-radius: 2px;
+}
+
+.dark .prose-mono mark {
+  background: rgba(250, 204, 21, 0.25);
+  color: #fff;
+}
+
