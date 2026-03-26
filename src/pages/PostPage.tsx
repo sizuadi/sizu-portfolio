@@ -6,6 +6,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { getPostBySlug } from "@/lib/posts";
+import { SEO } from "@/components/SEO";
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("en-US", {
@@ -66,6 +67,7 @@ export function PostPage() {
   if (!post) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black">
+        <SEO title="404 - Post Not Found | Sizu Dev" description="The requested post could not be found." />
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-neutral-900 dark:text-white mb-4">
             404
@@ -87,6 +89,11 @@ export function PostPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black font-[Space_Grotesk,Inter,system-ui,sans-serif]">
+      <SEO 
+        title={`${post.title} | ${post.tags ? post.tags.join(', ') : 'Blog'}`}
+        description={post.content.slice(0, 160).replace(/[#*`_~]/g, '') + "..."}
+        type="article"
+      />
       <div className="mx-auto max-w-3xl px-6 pt-24 pb-20">
         {/* Back link */}
         <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>

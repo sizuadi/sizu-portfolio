@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { portfolio } from "@/data/portfolio";
+import { SEO } from "@/components/SEO";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -16,6 +17,13 @@ import { StarfallCanvas } from "@/components/ui/StarfallCanvas";
 function HomePage() {
   return (
     <div className="bg-white dark:bg-black text-neutral-900 dark:text-white font-[Space_Grotesk,Inter,system-ui,sans-serif] min-h-screen transition-colors duration-300">
+      <SEO
+        title={`${portfolio.name} — Fullstack Engineer`}
+        description="Sizu Dev — Fullstack Engineer. Building systems that scale and interfaces that feel right."
+        name={portfolio.name}
+        type="website"
+        url="https://sizuwano.com/"
+      />
       <Navbar name={portfolio.name} />
       <HeroSection data={portfolio} />
       <AboutSection data={portfolio} />
