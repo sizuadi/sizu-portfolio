@@ -72,8 +72,8 @@ export function Navbar({ name }: { name: string }) {
               {l.label}
             </a>
           ))}
-        </div>
           <ThemeToggle />
+        </div>
 
         {/* Mobile: theme toggle + hamburger */}
         <div className="flex md:hidden items-center gap-3">
