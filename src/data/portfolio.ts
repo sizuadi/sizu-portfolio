@@ -8,7 +8,7 @@ export const portfolio: PortfolioData = {
   email: "adi15siswanto@gmail.com",
 
   about: [
-    "A passionate full-stack developer with a commitment to crafting solution for web applications. My journey in the world of technology began with a deep curiosity for both front-end and back-end development, and it has been an exhilarating ride ever since.. I believe great engineering is invisible — users should feel the quality without seeing the complexity.",
+    "A passionate full-stack developer with a commitment to crafting solution for web applications. My journey in the world of technology began with a deep curiosity for both front-end and back-end development, and it has been an exhilarating ride ever since. I believe great engineering is invisible — users should feel the quality without seeing the complexity.",
     "Currently focused on building high-performance web applications with React, TypeScript, Go, Laravel, and cloud-native infrastructure.",
   ],
 
