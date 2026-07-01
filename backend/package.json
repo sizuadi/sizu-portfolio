@@ -1,0 +1,21 @@
+{
+  "name": "sizu-portfolio-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Sizu Portfolio - built with ElysiaJS + Bun",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "migrate": "bun run src/shared/database/migrate.ts",
+    "seed": "bun run src/shared/database/seed.ts"
+  },
+  "dependencies": {
+    "elysia": "^1.2.25",
+    "@elysiajs/jwt": "^1.2.1",
+    "@elysiajs/cors": "^1.2.0",
+    "@elysiajs/swagger": "^1.2.4"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}

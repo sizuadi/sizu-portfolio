@@ -19,6 +19,7 @@ export interface Experience {
   tech: string[];
 }
 
+
 export interface Education {
   id: string;
   degree: string;

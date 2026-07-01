@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { portfolio } from "@/data/portfolio";
 import { SEO } from "@/components/SEO";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -13,8 +12,12 @@ import { ContactSection } from "@/components/sections/ContactSection";
 import { PostPage } from "@/pages/PostPage";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { StarfallCanvas } from "@/components/ui/StarfallCanvas";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 
 function HomePage() {
+  // Data portfolio diambil dari API; fallback ke data statis jika backend down
+  const { data: portfolio } = usePortfolioData();
+
   return (
     <div className="bg-white dark:bg-black text-neutral-900 dark:text-white font-[Space_Grotesk,Inter,system-ui,sans-serif] min-h-screen transition-colors duration-300">
       <SEO
@@ -49,4 +52,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-
