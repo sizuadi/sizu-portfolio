@@ -6,7 +6,7 @@
 
 when:
   branch: main
-  event: push
+  event: [push, manual]
 
 steps:
   # ── 1. Install deps & Build Frontend ─────────────────────
