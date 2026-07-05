@@ -1,0 +1,49 @@
+# ============================================================
+# Woodpecker CI Pipeline — Sizu Portfolio
+# Trigger : push ke branch main
+# Strategy: build di CI agent → deploy via Docker di VPS
+# ============================================================
+
+when:
+  branch: main
+  event: push
+
+steps:
+  # ── 1. Install deps & Build Frontend ─────────────────────
+  build-frontend:
+    image: oven/bun:1.2-alpine
+    commands:
+      - bun install
+      - bun run build
+    when:
+      path:
+        include:
+          - src/**
+          - public/**
+          - index.html
+          - vite.config.*
+          - tailwind.config.*
+          - package.json
+
+  # ── 2. Install deps & Build Admin ────────────────────────
+  build-admin:
+    image: oven/bun:1.2-alpine
+    commands:
+      - cd admin
+      - bun install
+      - bun run build
+    when:
+      path:
+        include:
+          - admin/src/**
+          - admin/package.json
+
+  # ── 3. Deploy ke VPS via Docker ──────────────────────────
+  deploy:
+    image: docker:24-cli
+    commands:
+      - docker compose -f /var/www/sizu-portfolio/docker-compose.yml build --no-cache portfolio-backend
+      - docker compose -f /var/www/sizu-portfolio/docker-compose.yml up -d
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/www/sizu-portfolio:/var/www/sizu-portfolio
