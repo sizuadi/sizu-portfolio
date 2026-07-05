@@ -108,3 +108,4 @@ Adding blog posts can be managed through the logic in `src/lib/posts.ts` and ren
 ## 📄 License
 
 This project is private. See `package.json` for details.
+# CI/CD via Woodpecker
