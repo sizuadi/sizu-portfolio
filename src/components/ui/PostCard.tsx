@@ -19,14 +19,14 @@ function formatDate(dateStr: string): string {
 }
 
 interface PostCardPost extends Post {
-  slug: string;
+  slug?: string;
 }
 
 export function PostCard({ post }: { post: PostCardPost }) {
   return (
     <motion.article {...fadeUp}>
       <Link
-        to={`/post/${post.slug}`}
+        to={`/post/${post.slug ?? post.id}`}
         className="group block border-b border-neutral-200 dark:border-white/10 py-6 first:pt-0 last:border-b-0 no-underline transition-all duration-200"
       >
         {/* Meta row */}

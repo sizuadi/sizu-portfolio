@@ -25,6 +25,7 @@ export function PostsSection() {
   const [posts, setPosts] = useState<Post[]>(
     allPosts.map((p) => ({
       id: p.id,
+      slug: p.slug ?? p.id,
       title: p.title,
       excerpt: p.excerpt,
       date: p.date,
@@ -40,6 +41,7 @@ export function PostsSection() {
         setPosts(
           (apiPosts as ApiPost[]).map((p) => ({
             id: p.id,
+            slug: p.slug ?? p.id,
             title: p.title,
             excerpt: p.excerpt,
             date: p.date,

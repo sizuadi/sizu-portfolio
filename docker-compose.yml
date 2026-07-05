@@ -1,14 +1,85 @@
-version: '3.8'
+# ============================================================
+# Sizu Portfolio — Docker Compose (Production)
+# Services: frontend (3005), backend (3006), admin (3007)
+# ============================================================
 
 services:
-  portfolio:
-    container_name: sizuwanoadi/sizu-portfolio
-    image: sizuwanoadi/sizu-portfolio:latest
+  # ── Frontend — React SPA ──────────────────────────────────
+  portfolio-frontend:
+    container_name: sizu-portfolio-frontend
     build:
       context: .
       dockerfile: Dockerfile
+      target: frontend
     ports:
-      - "8080:80"
+      - "127.0.0.1:3005:80"
     restart: unless-stopped
     environment:
       - NODE_ENV=production
+    depends_on:
+      portfolio-backend:
+        condition: service_healthy
+    networks:
+      - portfolio-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── Backend — ElysiaJS + Bun ──────────────────────────────
+  portfolio-backend:
+    container_name: sizu-portfolio-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:3006:3006"
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    volumes:
+      - portfolio-db:/app/data
+    networks:
+      - portfolio-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3006/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── Admin Panel — React SPA ───────────────────────────────
+  portfolio-admin:
+    container_name: sizu-portfolio-admin
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:3007:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      portfolio-backend:
+        condition: service_healthy
+    networks:
+      - portfolio-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  portfolio-net:
+    driver: bridge
+
+volumes:
+  portfolio-db:
+    driver: local

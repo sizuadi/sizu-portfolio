@@ -1,35 +1,31 @@
-# Stage 1: Build the React/Vite application
-FROM node:20-alpine AS builder
+# ============================================================
+# Sizu Portfolio Frontend — Dockerfile (Bun + Vite → Nginx)
+# ============================================================
 
-# Set working directory
+FROM oven/bun:1.2-alpine AS builder-frontend
+
 WORKDIR /app
 
-# Copy dependency files
-COPY package*.json ./
+COPY package.json bun.lock ./
+RUN bun install
 
-# Install dependencies cleanly
-RUN npm ci
-
-# Copy the rest of the application code
 COPY . .
+RUN bun run build
 
-# Build the application
-RUN npm run build
+# ── Serve ─────────────────────────────────────────────────────
+FROM nginx:1.27-alpine AS frontend
 
-# Stage 2: Serve the application with Nginx
-FROM nginx:alpine
+RUN rm -rf /usr/share/nginx/html/* /etc/nginx/conf.d/default.conf
 
-# Remove default nginx static assets
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy the built assets from the builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copy custom nginx configuration for SPA routing
+COPY --from=builder-frontend /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80 (default for Nginx)
+RUN chown -R nginx:nginx /usr/share/nginx/html \
+    && chmod -R 755 /usr/share/nginx/html
+
 EXPOSE 80
 
-# Start nginx in the foreground
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD wget -qO- http://localhost/index.html || exit 1
+
 CMD ["nginx", "-g", "daemon off;"]

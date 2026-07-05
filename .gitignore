@@ -134,4 +134,4 @@ Thumbs.db
 .vscode/
 
 # Project specific
-PROMPT_FOR_AI_MODEL.md
+PROMPT_FOR_AI_MODEL.mdbackend/.env
