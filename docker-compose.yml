@@ -1,16 +1,14 @@
 # ============================================================
 # Sizu Portfolio — Docker Compose (Production)
 # Services: frontend (3005), backend (3006), admin (3007)
+# Images dari Docker Hub: sizuwanoadi/sizu-portfolio-*
 # ============================================================
 
 services:
   # ── Frontend — React SPA ──────────────────────────────────
   portfolio-frontend:
     container_name: sizu-portfolio-frontend
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: frontend
+    image: ${FRONTEND_IMAGE:-sizuwanoadi/sizu-portfolio-frontend:latest}
     ports:
       - "127.0.0.1:3005:80"
     restart: unless-stopped
@@ -30,9 +28,7 @@ services:
   # ── Backend — ElysiaJS + Bun ──────────────────────────────
   portfolio-backend:
     container_name: sizu-portfolio-backend
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: ${BACKEND_IMAGE:-sizuwanoadi/sizu-portfolio-backend:latest}
     ports:
       - "127.0.0.1:3006:3006"
     restart: unless-stopped
@@ -57,9 +53,7 @@ services:
   # ── Admin Panel — React SPA ───────────────────────────────
   portfolio-admin:
     container_name: sizu-portfolio-admin
-    build:
-      context: ./admin
-      dockerfile: Dockerfile
+    image: ${ADMIN_IMAGE:-sizuwanoadi/sizu-portfolio-admin:latest}
     ports:
       - "127.0.0.1:3007:80"
     restart: unless-stopped
