@@ -79,15 +79,13 @@ pipeline {
 
         stage('Deploy ke VPS') {
             steps {
-                withCredentials([sshUserPrivateKey(
-                    credentialsId: 'vps-deploy-key',
-                    keyFileVariable: 'SSH_KEY_FILE',
-                    usernameVariable: 'SSH_USER'
-                )]) {
-                    bat """
-                        ssh -o StrictHostKeyChecking=no -p 6969 -i "%SSH_KEY_FILE%" %SSH_USER%@%VPS_HOST% "IMAGE_TAG=%IMAGE_TAG% bash %VPS_DIR%/deploy.sh"
-                    """
+                script {
+                    env.SSH_KEY_FILE = 'C:\\\\Jenkins\\\\data\\\\vps_deploy_key'
                 }
+                bat """
+                    icacls "%SSH_KEY_FILE%" /inheritance:r /grant:r "%USERNAME%:(R)" /c 2>nul || echo Key perm fix attempted
+                    ssh -o StrictHostKeyChecking=no -p 6969 -i "%SSH_KEY_FILE%" %VPS_USER%@%VPS_HOST% "IMAGE_TAG=%IMAGE_TAG% bash %VPS_DIR%/deploy.sh"
+                """
             }
         }
     }
