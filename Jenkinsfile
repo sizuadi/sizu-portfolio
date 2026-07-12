@@ -19,16 +19,19 @@ pipeline {
             steps {
                 checkout scm
                 script {
-                    env.GIT_TAG = bat(
-                        script: 'git describe --tags --exact-match 2>nul || echo ""',
-                        returnStdout: true
-                    ).trim().readLines().last()
-
-                    if (!env.GIT_TAG || env.GIT_TAG == '') {
+                    // Ambil tag dari env Jenkins (dikirim webhook) atau dari git
+                    def tag = env.GIT_TAG_NAME ?: ''
+                    if (!tag || tag == '') {
+                        tag = bat(
+                            script: 'git tag --points-at HEAD 2>nul || echo ""',
+                            returnStdout: true
+                        ).trim().readLines().last().trim()
+                    }
+                    if (!tag || tag == '') {
                         currentBuild.result = 'NOT_BUILT'
                         error('Bukan push tag — skip build.')
                     }
-                    env.IMAGE_TAG = env.GIT_TAG
+                    env.IMAGE_TAG = tag
                     echo "Building tag: ${env.IMAGE_TAG}"
                 }
             }
