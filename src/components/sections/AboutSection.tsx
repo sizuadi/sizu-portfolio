@@ -12,7 +12,7 @@ const fadeUp = {
 export function AboutSection({ data }: { data: PortfolioData }) {
   return (
     <section id="about" className="border-t border-neutral-200 dark:border-white/10">
-      <div className="mx-auto max-w-3xl px-6 py-16">
+      <div className="mx-auto max-w-5xl px-6 py-16">
         <SectionHeading>About</SectionHeading>
         {data.about.map((p, i) => (
           <motion.p
