@@ -7,38 +7,56 @@ interface SEOProps {
   type?: string;
   url?: string;
   image?: string;
+  noindex?: boolean;
 }
 
 export function SEO({
   title,
   description,
   name,
-  type,
+  type = "website",
   url,
   image,
+  noindex = false,
 }: SEOProps) {
+  const canonical = url ?? "https://sizu.dev/";
+  const ogImage = image ?? "https://sizu.dev/favicon_io/apple-touch-icon.png";
+
   return (
     <Helmet>
-      {/* Standard metadata tags */}
+      {/* Standard */}
       {title && <title>{title}</title>}
       {description && <meta name="description" content={description} />}
-      {/* End standard metadata tags */}
+      <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+      <link rel="canonical" href={canonical} />
 
-      {/* Open Graph tags */}
-      {type && <meta property="og:type" content={type} />}
+      {/* Open Graph */}
+      <meta property="og:type" content={type} />
       {title && <meta property="og:title" content={title} />}
       {description && <meta property="og:description" content={description} />}
-      {url && <meta property="og:url" content={url} />}
+      <meta property="og:url" content={canonical} />
       {name && <meta property="og:site_name" content={name} />}
-      {image && <meta property="og:image" content={image} />}
-      {/* End Open Graph tags */}
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:locale" content="id_ID" />
 
-      {/* Twitter tags */}
+      {/* Twitter */}
+      <meta name="twitter:card" content="summary_large_image" />
       {title && <meta name="twitter:title" content={title} />}
       {description && <meta name="twitter:description" content={description} />}
-      {image && <meta name="twitter:image" content={image} />}
-      <meta name="twitter:card" content="summary_large_image" />
-      {/* End Twitter tags */}
+      <meta name="twitter:image" content={ogImage} />
+
+      {/* JSON-LD Person */}
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: name ?? "Adi Siswanto",
+        url: canonical,
+        jobTitle: "Fullstack Engineer",
+        sameAs: [
+          "https://github.com/sizuadi",
+          "https://linkedin.com/in/adi-siswanto",
+        ],
+      })}</script>
     </Helmet>
   );
 }
