@@ -24,7 +24,7 @@ const app = new Elysia()
   // Hanya izinkan origin dari frontend dan admin panel
   .use(
     cors({
-      origin: [env.FRONTEND_URL, env.ADMIN_URL],
+      origin: [env.FRONTEND_URL, env.ADMIN_URL, env.BLOG_URL],
       credentials: true, // wajib untuk cookie cross-origin
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],

@@ -29,6 +29,7 @@ export const env = {
 
   FRONTEND_URL: getOptionalEnv("FRONTEND_URL", "http://localhost:5173"),
   ADMIN_URL: getOptionalEnv("ADMIN_URL", "http://localhost:5174"),
+  BLOG_URL: getOptionalEnv("BLOG_URL", "http://localhost:5175"),
 
   ADMIN_EMAIL: getRequiredEnv("ADMIN_EMAIL"),
   ADMIN_PASSWORD: getRequiredEnv("ADMIN_PASSWORD"),
