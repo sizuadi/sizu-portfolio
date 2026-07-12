@@ -9,11 +9,20 @@
     "preview": "vite preview --port 5174"
   },
   "dependencies": {
+    "@tiptap/extension-bubble-menu": "^3.27.3",
+    "@tiptap/extension-image": "^3.27.3",
+    "@tiptap/extension-link": "^3.27.3",
+    "@tiptap/extension-placeholder": "^3.27.3",
+    "@tiptap/extension-text-align": "^3.27.3",
+    "@tiptap/extension-typography": "^3.27.3",
+    "@tiptap/extension-underline": "^3.27.3",
+    "@tiptap/react": "^3.27.3",
+    "@tiptap/starter-kit": "^3.27.3",
+    "@uiw/react-md-editor": "^4.0.5",
+    "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.13.2",
-    "lucide-react": "^0.468.0",
-    "@uiw/react-md-editor": "^4.0.5"
+    "react-router-dom": "^7.13.2"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",

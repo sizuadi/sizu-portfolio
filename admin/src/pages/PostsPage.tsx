@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useState } from "react";
-import MDEditor from "@uiw/react-md-editor";
+import { RichEditor } from "@/components/ui/RichEditor";
 import { postsApi } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -144,13 +144,11 @@ export function PostsPage() {
           <TagInput label="Tags" value={form.tags} onChange={(tags) => setForm({ ...form, tags })} />
 
           {/* Content editor WYSIWYG */}
-          <div className="space-y-2" data-color-mode="light">
+          <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Content*</label>
-            <MDEditor
+            <RichEditor
               value={form.content}
-              onChange={(val) => setForm({ ...form, content: val ?? "" })}
-              height={500}
-              preview="live"
+              onChange={(html) => setForm({ ...form, content: html })}
             />
           </div>
 
