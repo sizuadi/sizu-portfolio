@@ -30,13 +30,38 @@ export interface PostListRow {
 export class PostsRepository {
   // ── Read ──────────────────────────────────
 
-  /** Public: hanya yang published */
-  getPublishedPosts(): PostListRow[] {
-    return db.query<PostListRow, []>(
-      `SELECT id, slug, title, excerpt, date, read_time, published
-       FROM posts WHERE published = 1
-       ORDER BY date DESC`
-    ).all();
+  /** Public: published posts dengan pagination + filter */
+  getPublishedPosts(page = 1, limit = 10, tag?: string): { posts: PostListRow[]; total: number } {
+    const offset = (page - 1) * limit;
+    let countQuery = "SELECT COUNT(*) as c FROM posts WHERE published = 1";
+    let dataQuery = `SELECT id, slug, title, excerpt, date, read_time, published FROM posts WHERE published = 1`;
+    const params: (string | number)[] = [];
+
+    if (tag) {
+      countQuery += " AND id IN (SELECT post_id FROM post_tags WHERE tag = ?)";
+      dataQuery += " AND id IN (SELECT post_id FROM post_tags WHERE tag = ?)";
+      params.push(tag);
+    }
+
+    dataQuery += " ORDER BY date DESC LIMIT ? OFFSET ?";
+
+    const total = db.query<{ c: number }, (string | number)[]>(countQuery).get(...params)!.c;
+    const posts = db.query<PostListRow, (string | number)[]>(dataQuery)
+      .all(...params, limit, offset);
+
+    return { posts, total };
+  }
+
+  /** Semua tag yang pernah dipakai */
+  getAllTags(): string[] {
+    return db.query<{ tag: string }, []>(
+      "SELECT DISTINCT tag FROM post_tags ORDER BY tag ASC"
+    ).all().map((r) => r.tag);
+  }
+
+  /** Published post by slug */
+  getPublishedPostBySlug(slug: string): PostRow | null {
+    return this.getPostBySlug(slug, true);
   }
 
   /** Admin: semua post */

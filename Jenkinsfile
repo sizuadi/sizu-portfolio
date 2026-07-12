@@ -55,6 +55,7 @@ pipeline {
                     docker build -t %DOCKER_HUB_USER%/%IMAGE_NAME%-frontend:%IMAGE_TAG% --target frontend .
                     docker build -t %DOCKER_HUB_USER%/%IMAGE_NAME%-backend:%IMAGE_TAG% ./backend
                     docker build -t %DOCKER_HUB_USER%/%IMAGE_NAME%-admin:%IMAGE_TAG% ./admin
+                    docker build -t %DOCKER_HUB_USER%/%IMAGE_NAME%-blog:%IMAGE_TAG% ./blog
                 """
             }
         }
@@ -65,14 +66,17 @@ pipeline {
                     docker push %DOCKER_HUB_USER%/%IMAGE_NAME%-frontend:%IMAGE_TAG%
                     docker push %DOCKER_HUB_USER%/%IMAGE_NAME%-backend:%IMAGE_TAG%
                     docker push %DOCKER_HUB_USER%/%IMAGE_NAME%-admin:%IMAGE_TAG%
+                    docker push %DOCKER_HUB_USER%/%IMAGE_NAME%-blog:%IMAGE_TAG%
 
                     docker tag %DOCKER_HUB_USER%/%IMAGE_NAME%-frontend:%IMAGE_TAG% %DOCKER_HUB_USER%/%IMAGE_NAME%-frontend:latest
                     docker tag %DOCKER_HUB_USER%/%IMAGE_NAME%-backend:%IMAGE_TAG% %DOCKER_HUB_USER%/%IMAGE_NAME%-backend:latest
                     docker tag %DOCKER_HUB_USER%/%IMAGE_NAME%-admin:%IMAGE_TAG% %DOCKER_HUB_USER%/%IMAGE_NAME%-admin:latest
+                    docker tag %DOCKER_HUB_USER%/%IMAGE_NAME%-blog:%IMAGE_TAG% %DOCKER_HUB_USER%/%IMAGE_NAME%-blog:latest
 
                     docker push %DOCKER_HUB_USER%/%IMAGE_NAME%-frontend:latest
                     docker push %DOCKER_HUB_USER%/%IMAGE_NAME%-backend:latest
                     docker push %DOCKER_HUB_USER%/%IMAGE_NAME%-admin:latest
+                    docker push %DOCKER_HUB_USER%/%IMAGE_NAME%-blog:latest
                 """
             }
         }

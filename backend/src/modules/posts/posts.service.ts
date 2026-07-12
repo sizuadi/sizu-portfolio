@@ -25,14 +25,20 @@ export class PostsService {
 
   // ── Public ────────────────────────────────
 
-  getPublishedPosts(): PostSummary[] {
-    return this.repo.getPublishedPosts().map((p) =>
-      this._toSummary(p, this.repo.getPostTags(p.id))
-    );
+  getPublishedPosts(page = 1, limit = 10, tag?: string): { posts: PostSummary[]; total: number } {
+    const result = this.repo.getPublishedPosts(page, limit, tag);
+    return {
+      posts: result.posts.map((p) => this._toSummary(p, this.repo.getPostTags(p.id))),
+      total: result.total,
+    };
+  }
+
+  getAllTags(): string[] {
+    return this.repo.getAllTags();
   }
 
   getPublishedPostBySlug(slug: string): PostDetail | null {
-    const post = this.repo.getPostBySlug(slug, true);
+    const post = this.repo.getPublishedPostBySlug(slug);
     if (!post) return null;
     return this._toDetail(post, this.repo.getPostTags(post.id));
   }

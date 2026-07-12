@@ -27,7 +27,13 @@ const postsService = new PostsService(new PostsRepository());
 // ─────────────────────────────────────────
 
 export const publicPostsRoute = new Elysia({ prefix: "/posts" })
-  .get("/", () => ok(postsService.getPublishedPosts()))
+  .get("/", ({ query }) => {
+    const page = Number(query?.page) || 1;
+    const limit = Number(query?.limit) || 10;
+    const tag = query?.tag;
+    return ok(postsService.getPublishedPosts(page, limit, tag));
+  })
+  .get("/tags", () => ok(postsService.getAllTags()))
   .get("/:slug", ({ params, set }) => {
     const post = postsService.getPublishedPostBySlug(params.slug);
     if (!post) { set.status = 404; return fail("Post tidak ditemukan"); }
