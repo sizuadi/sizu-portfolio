@@ -178,9 +178,10 @@ export function PostPage() {
           transition={{ delay: 0.2 }}
           className="prose-mono"
         >
-          <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-            {post.content}
-          </ReactMarkdown>
+          <div
+            className="prose prose-lg max-w-none dark:prose-invert"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
         </motion.article>
 
         <hr className="border-neutral-200 dark:border-white/10 mt-16 mb-8" />
