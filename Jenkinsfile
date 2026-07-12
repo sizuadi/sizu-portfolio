@@ -85,7 +85,7 @@ pipeline {
                     usernameVariable: 'SSH_USER'
                 )]) {
                     bat """
-                        ssh -o StrictHostKeyChecking=no -i "%SSH_KEY_FILE%" %SSH_USER%@%VPS_HOST% "IMAGE_TAG=%IMAGE_TAG% bash %VPS_DIR%/deploy.sh"
+                        ssh -o StrictHostKeyChecking=no -p 6969 -i "%SSH_KEY_FILE%" %SSH_USER%@%VPS_HOST% "IMAGE_TAG=%IMAGE_TAG% bash %VPS_DIR%/deploy.sh"
                     """
                 }
             }
