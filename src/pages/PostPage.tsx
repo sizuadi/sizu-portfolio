@@ -1,10 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { marked } from "marked";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { getPostBySlug } from "@/lib/posts";
 import { portfolioApiClient } from "@/lib/api";
@@ -29,66 +26,38 @@ function formatDate(dateStr: string): string {
   });
 }
 
-/* Custom components for ReactMarkdown — syntax-highlighted code blocks */
-const markdownComponents = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  code({ className, children, ...props }: any) {
-    const match = /language-(\w+)/.exec(className || "");
-    const codeString = String(children).replace(/\n$/, "");
 
-    if (match) {
-      const language = match[1];
-      return (
-        <div className="my-6 border border-neutral-200 dark:border-white/10 overflow-hidden">
-          <div className="flex items-center px-4 py-2 bg-neutral-100 dark:bg-white/5 border-b border-neutral-200 dark:border-white/10">
-            <span className="text-[0.6875rem] font-semibold text-neutral-500 dark:text-white/50 uppercase tracking-wider">
-              {language}
-            </span>
-          </div>
-          <SyntaxHighlighter
-            style={vscDarkPlus}
-            language={language}
-            PreTag="div"
-            customStyle={{
-              margin: 0,
-              borderRadius: 0,
-              border: "none",
-              fontSize: "0.8125rem",
-              lineHeight: "1.7",
-            }}
-          >
-            {codeString}
-          </SyntaxHighlighter>
-        </div>
-      );
-    }
 
-    return (
-      <code className={className} {...props}>
-        {children}
-      </code>
-    );
-  },
-};
 
 export function PostPage() {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<PostData | null | undefined>(undefined); // undefined = loading
+  const [post, setPost] = useState<PostData | null | undefined>(undefined);
+  const [renderedContent, setRenderedContent] = useState("");
 
   useEffect(() => {
     if (!slug) { setPost(null); return; }
-
-    // 1. Coba API
     portfolioApiClient.getPost(slug).then((apiPost) => {
       if (apiPost) {
         setPost(apiPost as PostData);
       } else {
-        // 2. Fallback ke static posts (.md files)
         const staticPost = getPostBySlug(slug);
         setPost(staticPost ?? null);
       }
     });
   }, [slug]);
+
+  // Convert Markdown → HTML jika perlu
+  useEffect(() => {
+    if (!post?.content) return;
+    const content = post.content;
+    const isMarkdown = !content.trimStart().startsWith("<") &&
+      /^#{1,6}\s|^\*\*|`[^`]|^\s*[-*+]\s|^\s*\d+\.\s/m.test(content);
+    if (isMarkdown) {
+      Promise.resolve(marked(content)).then(setRenderedContent);
+    } else {
+      setRenderedContent(content);
+    }
+  }, [post?.content]);
 
   // Loading state
   if (post === undefined) {
@@ -180,7 +149,7 @@ export function PostPage() {
         >
           <div
             className="prose prose-lg max-w-none dark:prose-invert"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: renderedContent }}
           />
         </motion.article>
 

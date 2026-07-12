@@ -11,6 +11,7 @@ import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import { useState, useEffect, useRef } from "react";
+import { marked } from "marked";
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough,
   Link as LinkIcon, AlignLeft, AlignCenter, AlignRight,
@@ -42,6 +43,19 @@ function Btn({ onClick, active, title, children, dark }: BtnProps) {
   );
 }
 
+// Detect apakah string adalah Markdown (bukan HTML)
+function isMarkdown(str: string): boolean {
+  if (!str) return false;
+  if (str.trimStart().startsWith("<")) return false; // sudah HTML
+  return /^#{1,6}\s|^\*\*|^__|\*[^*]|`[^`]|^\s*[-*+]\s|^\s*\d+\.\s|^\s*>/m.test(str);
+}
+
+async function toHTML(content: string): Promise<string> {
+  if (!content) return "";
+  if (isMarkdown(content)) return await marked(content) as string;
+  return content;
+}
+
 export function RichEditor({ value, onChange, placeholder = "Tulis artikel kamu di sini..." }: RichEditorProps) {
   const [showFloating, setShowFloating] = useState(false);
   const [floatingPos, setFloatingPos] = useState({ top: 0, left: 0 });
@@ -56,7 +70,7 @@ export function RichEditor({ value, onChange, placeholder = "Tulis artikel kamu 
       Link.configure({ openOnClick: false, HTMLAttributes: { class: "text-indigo-600 underline" } }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
-    content: value || "",
+    content: "",
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
@@ -79,7 +93,7 @@ export function RichEditor({ value, onChange, placeholder = "Tulis artikel kamu 
     },
     editorProps: {
       attributes: {
-        class: "prose prose-lg max-w-none min-h-[500px] px-6 py-4 focus:outline-none",
+        class: "prose prose-lg prose-neutral max-w-none min-h-[500px] px-8 py-6 focus:outline-none prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-950 prose-pre:text-gray-100",
       },
     },
   });
@@ -89,6 +103,16 @@ export function RichEditor({ value, onChange, placeholder = "Tulis artikel kamu 
     document.addEventListener("mousedown", hide);
     return () => document.removeEventListener("mousedown", hide);
   }, []);
+
+  // Load + convert content (Markdown → HTML jika perlu)
+  useEffect(() => {
+    if (!editor) return;
+    toHTML(value).then((html) => {
+      if (editor.getHTML() !== html) {
+        editor.commands.setContent(html || "", false);
+      }
+    });
+  }, [editor, value]);
 
   if (!editor) return null;
 
