@@ -12,6 +12,7 @@ import { SEO } from "@/components/SEO";
 
 interface PostData {
   id: string;
+  slug: string;
   title: string;
   excerpt: string;
   content: string;
@@ -121,8 +122,9 @@ export function PostPage() {
     <div className="min-h-screen bg-white dark:bg-black font-[Space_Grotesk,Inter,system-ui,sans-serif]">
       <SEO
         title={`${post.title} | ${post.tags?.join(", ") ?? "Blog"}`}
-        description={post.content.slice(0, 160).replace(/[#*`_~]/g, "") + "..."}
+        description={post.excerpt || post.content.slice(0, 160).replace(/[#*`_~]/g, "") + "..."}
         type="article"
+        url={`https://sizu.dev/post/${post.slug ?? ""}`}
       />
       <div className="mx-auto max-w-3xl px-6 pt-24 pb-20">
         <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
